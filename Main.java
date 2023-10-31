@@ -12,14 +12,86 @@ public class Main {
 //1. Enumere todas las iniciativas distintas de manera descente.
 //2. Imprima el nombre completo de cualquier desarrollador cuyo nombre comience con "A".
 //3. Liste todos los desarrolladores que se unieron en el año 2023 (el año se extraerá del código del desarrollador, es decir, los primeros 4 caracteres)
+        int añoActual = 2023;
+        System.out.println("Desarrolladores que se unieron en el año 2023:");
+        for (Desarrollador desarrollador : employeeList) {
+
+            int añoUnión = Integer.parseInt(desarrollador.getCodigo().substring(0, 4));
+            if (añoUnión == añoActual) {
+                System.out.println(desarrollador.getNombres() + " se unió en el año " + añoActual);
+            }
+        }
 //4. Ordene los desarrolladores según el nombre; y luego ordene por salario.
 //5. Imprima los nombres de todos los desarrolladores con el tercer salario más alto. (Generalícelo para el enésimo salario más alto).
+        //5. Imprima los nombres de todos los desarrolladores con el tercer salario más alto. (Generalícelo para el enésimo salario más alto).
+        List<Desarrollador> copiaDesarrolladores = new ArrayList<>(employeeList);
+
+
+        Collections.sort(copiaDesarrolladores, Comparator.comparingInt(Desarrollador::getSalario).reversed());
+
+
+        int nSalarioMasAlto = 3;
+
+
+        if (nSalarioMasAlto <= copiaDesarrolladores.size()) {
+
+            int salarioDeseado = copiaDesarrolladores.get(nSalarioMasAlto - 1).getSalario();
+
+
+            System.out.println("Desarrolladores con el " + nSalarioMasAlto + "° salario más alto (" + salarioDeseado + "):");
+            for (Desarrollador desarrollador : employeeList) {
+                if (desarrollador.getSalario() == salarioDeseado) {
+                    System.out.println(desarrollador.getNombres());
+                }
+            }
+        } else {
+            System.out.println("No hay suficientes desarrolladores para obtener el " + nSalarioMasAlto + "° salario más alto.");
+        }
 //6. Imprimir salario mínimo.
+        int salarioMinimo = Integer.MAX_VALUE;
+
+        for (Desarrollador desarrollador : employeeList) {
+            if (desarrollador.getSalario() < salarioMinimo) {
+                salarioMinimo = desarrollador.getSalario();
+            }
+        }
 //7. Imprima la lista de todos los desarrolladores con salario mínimo.
+        salarioMinimo = Integer.MAX_VALUE;
+
+        for (Desarrollador desarrollador : employeeList) {
+            if (desarrollador.getSalario() < salarioMinimo) {
+                salarioMinimo = desarrollador.getSalario();
+            }
+        }
+        System.out.println("Desarrolladores con salario mínimo (" + salarioMinimo + "):");
+        for (Desarrollador desarrollador : employeeList) {
+            if (desarrollador.getSalario() == salarioMinimo) {
+                System.out.println(desarrollador);
+            }
+        }
 
 //8. Liste a todas las personas que trabajan en más de 2 proyectos.
+        Map<Desarrollador, Integer> proyectosPorDesarrollador = new HashMap<>();
+
+
+        for (Desarrollador desarrollador : employeeList) {
+            proyectosPorDesarrollador.put(desarrollador, desarrollador.getIniciativas().size());
+        }
+
+
+        System.out.println("Personas que trabajan en más de 2 proyectos:");
+        for (Map.Entry<Desarrollador, Integer> entry : proyectosPorDesarrollador.entrySet()) {
+            if (entry.getValue() > 2) {
+                System.out.println(entry.getKey().getNombres() + " trabaja en " + entry.getValue() + " proyectos.");
+            }
+        }
 
 //9. Conteo del total de laptops asignadas a los desarrolladores.
+        int totalLaptopsAsignadas = 0;
+        for (Desarrollador desarrollador : employeeList) {
+            totalLaptopsAsignadas += desarrollador.getTotalLaptopsAsignados();
+        }
+        System.out.println("Total de laptops asignadas a los desarrolladores: " + totalLaptopsAsignadas);
 
 //10. Recuento de todas las iniciativas con Luis Carrillo Lopez.
         long contadorIniciativasLuisCarrilloLopez = employeeList.stream()
